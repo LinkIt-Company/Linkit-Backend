@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { GetUser, PaginationMetadata } from '@src/common';
+import { GetUser } from '@src/common';
 import { CreatePostDto } from '@src/modules/posts/dto/create-post.dto';
 import { PostsService } from '@src/modules/posts/posts.service';
 import { JwtGuard } from '@src/modules/users/guards';
@@ -47,9 +47,8 @@ export class PostsController {
   async listPost(@GetUser() userId: string, @Query() query: ListPostQueryDto) {
     const { count, posts } = await this.postsService.listPost(userId, query);
     const postResponse = posts.map((post) => new ListPostItem(post));
-    const metadata = new PaginationMetadata(query.page, query.limit, count);
 
-    return new ListPostResponse(metadata, postResponse);
+    return new ListPostResponse(count, query.page, query.limit, postResponse);
   }
 
   @Get('count')
