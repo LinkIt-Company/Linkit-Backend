@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  Relation,
+} from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Folder } from './folder.entity';
 
@@ -19,7 +26,7 @@ export class AIClassification extends BaseEntity {
   @Column({ name: 'completed_at', nullable: true })
   completedAt: Date;
 
-  @Column({ name: 'deleted_at', nullable: true })
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt: Date;
 
   @ManyToOne(() => Folder)
