@@ -20,6 +20,7 @@ import { AiClassificationModule } from '../ai-classification/ai-classification.m
 import { FolderRepository } from '../folders/folders.repository';
 import { PostKeywordsRepository } from './postKeywords.repository';
 import { PostsController } from './posts.controller';
+import { PostsPGRepository } from './posts.pg.repository';
 import { PostsService } from './posts.service';
 
 @Module({
@@ -41,7 +42,8 @@ import { PostsService } from './posts.service';
     FolderRepository,
     AwsLambdaService,
     PostKeywordsRepository,
+    PostsPGRepository,
   ],
-  exports: [PostsService, PostsRepository],
+  exports: [PostsService, PostsRepository, PostsPGRepository],
 })
 export class PostsModule {}
