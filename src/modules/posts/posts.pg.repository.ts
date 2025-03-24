@@ -240,8 +240,6 @@ export class PostsPGRepository extends Repository<Post> {
     offset: number,
     limit: number,
   ): Promise<ClassificationPostList[]> {
-    const arraySql = suggestedFolderIds.map((id) => `'${id}'`).join(', '); // 문자열 uuid 배열
-
     const result = await this.dataSource
       .createQueryBuilder()
       .select([
@@ -255,7 +253,7 @@ export class PostsPGRepository extends Repository<Post> {
         'post.thumbnail_img_url AS "thumbnailImgUrl"',
         'ai.keywords AS "keywords"',
         'ai.suggested_folder_id AS "folderId"',
-        `array_position(ARRAY[${arraySql}]::uuid[], ai.suggested_folder_id) AS "folder_order"`,
+        `array_position(ARRAY[:...suggestedFolderIds]::uuid[], ai.suggested_folder_id) AS "folder_order"`,
       ])
       .from('posts', 'post')
       .innerJoin(
@@ -268,6 +266,7 @@ export class PostsPGRepository extends Repository<Post> {
       .andWhere('ai.suggested_folder_id IN (:...suggestedFolderIds)', {
         suggestedFolderIds,
       })
+      .setParameter('suggestedFolderIds', suggestedFolderIds)
       .orderBy('folder_order', 'ASC')
       .addOrderBy('post.created_at', 'DESC')
       .offset(offset)
