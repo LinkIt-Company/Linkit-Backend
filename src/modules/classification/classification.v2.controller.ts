@@ -96,18 +96,14 @@ export class ClassificationV2Controller {
 
   @Patch('/posts')
   @PatchAIPostListDocs
-  @HttpCode(HttpStatus.OK)
   async moveAllPost(
     @GetUser() userId: string,
     @Query('suggestionFolderId') suggestionFolderId: string,
-  ): Promise<{ success: boolean }> {
-    const result =
-      await this.classificationService.moveAllPostTosuggestionFolderV2(
-        userId,
-        suggestionFolderId,
-      );
-
-    return { success: result };
+  ) {
+    return await this.classificationService.moveAllPostTosuggestionFolder(
+      userId,
+      suggestionFolderId,
+    );
   }
 
   @Patch('/posts/:postId')
@@ -116,7 +112,7 @@ export class ClassificationV2Controller {
     @GetUser() userId: string,
     @Param('postId') postId: string,
     @Body() dto: UpdateAIClassificationDto,
-  ): Promise<void> {
+  ) {
     await this.classificationService.moveOnePostTosuggestionFolder(
       userId,
       postId,
