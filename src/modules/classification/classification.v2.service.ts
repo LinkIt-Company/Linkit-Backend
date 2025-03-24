@@ -107,9 +107,9 @@ export class ClassificationV2Service {
       );
     }
 
-    await this.classificationRepository.deleteManyBySuggestedFolderIdList(
+    await this.classificationRepository.deleteManyBySuggestedFolderIdList([
       suggestedFolderId,
-    );
+    ]);
 
     return true;
   }
@@ -158,10 +158,10 @@ export class ClassificationV2Service {
   }
 
   async deleteClassificationBySuggestedFolderId(
-    suggestedFolderId: string[] | string,
+    suggestedFolderIdList: string[],
   ): Promise<boolean> {
     return await this.classificationRepository.deleteManyBySuggestedFolderIdList(
-      suggestedFolderId,
+      suggestedFolderIdList,
     );
   }
 }

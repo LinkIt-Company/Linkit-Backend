@@ -110,14 +110,10 @@ export class ClassificationPGRepository extends Repository<AIClassification> {
   }
 
   async deleteManyBySuggestedFolderIdList(
-    suggestedFolderId: string[] | string,
+    suggestedFolderIdList: string[],
   ): Promise<boolean> {
-    const ids = Array.isArray(suggestedFolderId)
-      ? suggestedFolderId
-      : [suggestedFolderId];
-
     await this.update(
-      { suggestedFolderId: In(ids) },
+      { suggestedFolderId: In(suggestedFolderIdList) },
       { deletedAt: new Date() },
     );
 
