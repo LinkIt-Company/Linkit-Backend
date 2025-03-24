@@ -26,7 +26,7 @@ import { UpdateAIClassificationDto } from './dto/classification.dto';
 import { AIFolderNameListResponse } from './response/ai-folder-list.dto';
 import { AIPostListResponse } from './response/ai-post-list.dto';
 
-@Controller('v2/classification')
+@Controller({ version: '2', path: 'classification' })
 @UseGuards(JwtGuard)
 @ClassificationControllerDocs
 export class ClassificationV2Controller {
