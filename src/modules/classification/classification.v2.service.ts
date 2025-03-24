@@ -85,30 +85,6 @@ export class ClassificationV2Service {
   async moveAllPostTosuggestionFolder(
     userId: string,
     suggestedFolderId: string,
-  ): Promise<void> {
-    const postIdList = (
-      await this.postRepository.findFolderIdsBySuggestedFolderId(
-        userId,
-        suggestedFolderId,
-      )
-    ).map((post) => post.id);
-
-    if (postIdList.length > 0) {
-      await this.postRepository.updatePostListFolder(
-        userId,
-        postIdList,
-        suggestedFolderId,
-      );
-    }
-
-    await this.classificationRepository.deleteManyBySuggestedFolderIdList(
-      suggestedFolderId,
-    );
-  }
-
-  async moveAllPostTosuggestionFolderV2(
-    userId: string,
-    suggestedFolderId: string,
   ): Promise<boolean> {
     await this.folderRepository.makeFolderVisible(suggestedFolderId);
 
