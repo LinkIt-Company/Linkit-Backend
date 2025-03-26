@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FilterQuery, Types } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import { DataSource, FindOptionsWhere, IsNull, Not, Repository } from 'typeorm';
 import { OrderType } from '@src/common';
 import { Post } from '@src/infrastructure/database/entities/post.entity';
@@ -149,7 +149,7 @@ export class PostsPGRepository extends Repository<Post> {
 
   async findBySuggestedFolderId(
     userId: string,
-    suggestedFolderId: Types.ObjectId,
+    suggestedFolderId: string,
     offset: number,
     limit: number,
   ): Promise<ClassificationPostList[]> {
@@ -234,44 +234,57 @@ export class PostsPGRepository extends Repository<Post> {
 
     return count;
   }
-
   async findAndSortBySuggestedFolderIds(
-    userId: Types.ObjectId,
-    suggestedFolderIds: Types.ObjectId[],
+    userId: string,
+    suggestedFolderIds: string[],
     offset: number,
     limit: number,
   ): Promise<ClassificationPostList[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoinAndSelect('post.aiClassification', 'aiClassification')
-      .where('post.userId = :userId', { userId })
-      .andWhere('aiClassification.deletedAt IS NULL')
-      .andWhere(
-        'aiClassification.suggestedFolderId IN (:...suggestedFolderIds)',
-        {
-          suggestedFolderIds,
-        },
-      )
-      .addSelect(
-        `ARRAY_POSITION(:suggestedFolderIds::uuid[], aiClassification.suggestedFolderId::text)`,
-        'order',
-      )
-      .orderBy('order', 'ASC')
-      .addOrderBy('post.createdAt', 'DESC')
-      .skip(offset)
-      .take(limit)
+    const result = await this.dataSource
+      .createQueryBuilder()
       .select([
-        'aiClassification.suggestedFolderId as folderId',
-        'post.id as postId',
-        'post.title as title',
-        'post.url as url',
-        'post.description as description',
-        'post.createdAt as createdAt',
-        'post.readAt as readAt',
-        'post.aiStatus as aiStatus',
-        'post.thumbnailImgUrl as thumbnailImgUrl',
-        'aiClassification.keywords as keywords',
+        'post.id AS "postId"',
+        'post.title AS "title"',
+        'post.url AS "url"',
+        'post.description AS "description"',
+        'post.created_at AS "createdAt"',
+        'post.read_at AS "readAt"',
+        'post.ai_status AS "aiStatus"',
+        'post.thumbnail_img_url AS "thumbnailImgUrl"',
+        'ai.keywords AS "keywords"',
+        'ai.suggested_folder_id AS "folderId"',
+        `array_position(ARRAY[:...suggestedFolderIds]::uuid[], ai.suggested_folder_id) AS "folder_order"`,
       ])
-      .getRawMany<ClassificationPostList>();
+      .from('posts', 'post')
+      .innerJoin(
+        'ai_classifications',
+        'ai',
+        'post.ai_classification_id = ai.id',
+      )
+      .where('post.user_id = :userId', { userId })
+      .andWhere('ai.deleted_at IS NULL')
+      .andWhere('ai.suggested_folder_id IN (:...suggestedFolderIds)', {
+        suggestedFolderIds,
+      })
+      .setParameter('suggestedFolderIds', suggestedFolderIds)
+      .orderBy('folder_order', 'ASC')
+      .addOrderBy('post.created_at', 'DESC')
+      .offset(offset)
+      .limit(limit)
+      .getRawMany();
+
+    return result.map((row) => ({
+      postId: row.postId,
+      folderId: row.folderId,
+      title: row.title,
+      url: row.url,
+      description: row.description,
+      createdAt: row.createdAt,
+      readAt: row.readAt,
+      aiStatus: row.aiStatus,
+      thumbnailImgUrl: row.thumbnailImgUrl,
+      keywords: row.keywords,
+    }));
   }
 
   async findFolderIdsBySuggestedFolderId(

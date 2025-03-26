@@ -1,6 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { AIPostListResponse } from '../response/ai-post-list.dto';
 
 export const PatchAIPostListDocs = applyDecorators(
   ApiOperation({
@@ -8,7 +7,7 @@ export const PatchAIPostListDocs = applyDecorators(
     description: '추천 폴더 안에 들어있는 Post(링크)를 추천 폴더로 전부 이동',
   }),
   ApiResponse({
-    type: AIPostListResponse,
+    type: Boolean,
   }),
   ApiBearerAuth(),
 );

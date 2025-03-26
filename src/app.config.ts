@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   INestApplication,
   ValidationPipe,
+  VersioningType,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
@@ -17,6 +18,10 @@ export async function nestAppConfig<
   T extends INestApplication = INestApplication,
 >(app: T) {
   const reflector = app.get<Reflector>(Reflector);
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
