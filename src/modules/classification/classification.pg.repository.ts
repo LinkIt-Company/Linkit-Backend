@@ -84,11 +84,10 @@ export class ClassificationPGRepository extends Repository<AIClassification> {
         .innerJoin(
           'folders',
           'folder',
-          'folder.id = classification.suggestedFolderId',
+          'folder.id = classification.suggestedFolderId AND folder.userId = :userId AND folder.type != :type',
+          { userId, type: FolderType.DEFAULT },
         )
         .where('classification.deletedAt IS NULL')
-        .andWhere('folder.userId = :userId', { userId })
-        .andWhere('folder.type != :type', { type: FolderType.DEFAULT })
         .groupBy('folder.id')
         .addGroupBy('folder.name')
         .addGroupBy('folder.visible')
