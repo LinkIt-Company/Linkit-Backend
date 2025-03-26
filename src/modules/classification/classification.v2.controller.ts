@@ -72,7 +72,6 @@ export class ClassificationV2Controller {
 
   @Get('/posts/:folderId')
   @GetAIPostListDocs
-  @HttpCode(HttpStatus.OK)
   async getSuggestedPostListInFolder(
     @GetUser() userId: string,
     @Param('folderId') folderId: string,
@@ -98,11 +97,11 @@ export class ClassificationV2Controller {
   @PatchAIPostListDocs
   async moveAllPost(
     @GetUser() userId: string,
-    @Query('suggestionFolderId') suggestionFolderId: string,
+    @Body() dto: UpdateAIClassificationDto,
   ) {
     return await this.classificationService.moveAllPostTosuggestionFolder(
       userId,
-      suggestionFolderId,
+      dto.suggestionFolderId,
     );
   }
 

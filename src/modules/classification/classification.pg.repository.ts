@@ -81,7 +81,7 @@ export class ClassificationPGRepository extends Repository<AIClassification> {
           'COUNT(classification.id) as "postCount"',
           'CASE WHEN folder.visible = true THEN false ELSE true END as "isAIGenerated"',
         ])
-        .leftJoin(
+        .innerJoin(
           'folders',
           'folder',
           'folder.id = classification.suggestedFolderId',
