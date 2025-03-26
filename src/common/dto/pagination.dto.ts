@@ -38,6 +38,10 @@ export class PaginationQuery {
   @IsOptional()
   @IsEnum(OrderType)
   readonly order: OrderType;
+
+  getOffset(): number {
+    return Math.max(0, (this.page - 1) * this.limit);
+  }
 }
 
 // Pagination API Response의 Metadata로 추가해주세용

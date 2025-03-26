@@ -35,7 +35,7 @@ export class ClassificationV2Service {
     if (orderedFolderIdList.length === 0) {
       return { count: 0, classificationPostList: [] };
     }
-    const offset = (pagingQuery.page - 1) * pagingQuery.limit;
+    const offset = pagingQuery.getOffset();
     const classificationPostList =
       await this.postRepository.findAndSortBySuggestedFolderIds(
         userId,
@@ -64,7 +64,7 @@ export class ClassificationV2Service {
     folderId: string,
     pagingQuery: PaginationQuery,
   ) {
-    const offset = (pagingQuery.page - 1) * pagingQuery.limit;
+    const offset = pagingQuery.getOffset();
 
     const [count, classificationPostList] = await Promise.all([
       this.classificationRepository.getClassificationPostCount(
