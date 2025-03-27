@@ -48,7 +48,7 @@ export class PaginationMetadata {
 /**
  * Base Pagination Response
  */
-export abstract class BasePaginationResponse<T=any | any[]> {
+export abstract class BasePaginationResponse<T = any | any[]> {
   @ApiProperty({
     type: PaginationMetadata,
   })
