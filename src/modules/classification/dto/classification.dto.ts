@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsMongoId, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { PostAiStatus } from '@src/modules/posts/posts.constant';
 
 export interface ClassificationFolderWithCount {
@@ -51,7 +51,7 @@ export class ClassificationPostList {
 
 export class UpdateAIClassificationDto {
   @IsNotEmpty()
-  @IsMongoId()
+  @IsString()
   @ApiProperty({ description: '추천된 폴더의 아이디' })
   suggestionFolderId: string;
 }

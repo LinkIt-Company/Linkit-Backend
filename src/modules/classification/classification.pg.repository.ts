@@ -5,7 +5,7 @@ import { FolderType } from '@src/infrastructure/database/types/folder-type.enum'
 import { ClassificationFolderWithCount } from './dto/classification.dto';
 
 @Injectable()
-export class ClassficiationRepository extends Repository<AIClassification> {
+export class ClassificationPGRepository extends Repository<AIClassification> {
   constructor(private dataSource: DataSource) {
     super(AIClassification, dataSource.createEntityManager());
   }
@@ -73,27 +73,27 @@ export class ClassficiationRepository extends Repository<AIClassification> {
   async findContainedFolderByUserId(
     userId: string,
   ): Promise<ClassificationFolderWithCount[]> {
-    const result = await this.createQueryBuilder('classification')
-      .select([
-        'folder.id as folderId',
-        'folder.name as folderName',
-        'COUNT(classification.id) as postCount',
-        'CASE WHEN folder.visible = true THEN false ELSE true END as isAIGenerated',
-      ])
-      .leftJoin(
-        'folders',
-        'folder',
-        'folder.id = classification.suggestedFolderId',
-      )
-      .where('classification.deletedAt IS NULL')
-      .andWhere('folder.userId = :userId', { userId })
-      .andWhere('folder.type != :type', { type: FolderType.DEFAULT })
-      .groupBy('folder.id')
-      .addGroupBy('folder.name')
-      .addGroupBy('folder.visible')
-      .orderBy('postCount', 'DESC')
-      .addOrderBy('folder.createdAt', 'DESC')
-      .getRawMany();
+    const result: ClassificationFolderWithCount[] =
+      await this.createQueryBuilder('classification')
+        .select([
+          'folder.id as "folderId"',
+          'folder.name as "folderName"',
+          'COUNT(classification.id) as "postCount"',
+          'CASE WHEN folder.visible = true THEN false ELSE true END as "isAIGenerated"',
+        ])
+        .innerJoin(
+          'folders',
+          'folder',
+          'folder.id = classification.suggestedFolderId AND folder.userId = :userId AND folder.type != :type',
+          { userId, type: FolderType.DEFAULT },
+        )
+        .where('classification.deletedAt IS NULL')
+        .groupBy('folder.id')
+        .addGroupBy('folder.name')
+        .addGroupBy('folder.visible')
+        .orderBy('"postCount"', 'DESC')
+        .addOrderBy('folder.createdAt', 'DESC')
+        .getRawMany();
 
     return result;
   }
@@ -109,14 +109,10 @@ export class ClassficiationRepository extends Repository<AIClassification> {
   }
 
   async deleteManyBySuggestedFolderIdList(
-    suggestedFolderId: string[] | string,
+    suggestedFolderIdList: string[],
   ): Promise<boolean> {
-    const ids = Array.isArray(suggestedFolderId)
-      ? suggestedFolderId
-      : [suggestedFolderId];
-
     await this.update(
-      { suggestedFolderId: In(ids) },
+      { suggestedFolderId: In(suggestedFolderIdList) },
       { deletedAt: new Date() },
     );
 
