@@ -1,17 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, Min } from 'class-validator';
-
-export enum OrderType {
-  asc = 'asc',
-  desc = 'desc',
-}
+import { OrderType } from '@src/common/types';
 
 /**
  * Base Query for pagination
  *
  */
-export class PaginationQuery {
+export class BasePaginationQuery {
   @ApiProperty({
     description: 'Pagination - Page',
     default: 1,
@@ -41,4 +37,8 @@ export class PaginationQuery {
   @IsOptional()
   @IsEnum(OrderType)
   readonly order: OrderType;
+
+  getOffset(): number {
+    return Math.max(0, (this.page - 1) * this.limit);
+  }
 }

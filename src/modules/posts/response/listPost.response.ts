@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Types } from 'mongoose';
-import { BasePaginationResponse } from '@src/common/dto/response/paginated.dto';
+import { BasePaginationResponse } from '@src/common';
 import { Keyword, Post } from '@src/infrastructure';
 import { PostAiStatus } from '@src/modules/posts/posts.constant';
 import { KeywordItem } from './keyword-list.response';

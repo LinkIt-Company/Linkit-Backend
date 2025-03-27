@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsOptional } from 'class-validator';
-import { PaginationQuery } from '@src/common';
+import { BasePaginationQuery } from '@src/common';
 
-export class ListPostQueryDto extends PaginationQuery {
+export class ListPostQueryDto extends BasePaginationQuery {
   @ApiProperty({
     required: false,
     description: '즐겨찾기 필터링 여부 확인',

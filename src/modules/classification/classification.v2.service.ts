@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PaginationQuery, sum } from '@src/common';
+import { BasePaginationQuery, sum } from '@src/common';
 import { FoldersPGRepository } from '../folders/folders.pg.repository';
 import { PostsPGRepository } from '../posts/posts.pg.repository';
 import { ClassificationPGRepository } from './classification.pg.repository';
@@ -28,7 +28,7 @@ export class ClassificationV2Service {
     );
   }
 
-  async getPostList(userId: string, pagingQuery: PaginationQuery) {
+  async getPostList(userId: string, pagingQuery: BasePaginationQuery) {
     const { count, orderedFolderIdList } =
       await this.getFolderCountAndOrder(userId);
 
@@ -62,7 +62,7 @@ export class ClassificationV2Service {
   async getPostListInFolder(
     userId: string,
     folderId: string,
-    pagingQuery: PaginationQuery,
+    pagingQuery: BasePaginationQuery,
   ) {
     const offset = pagingQuery.getOffset();
 
