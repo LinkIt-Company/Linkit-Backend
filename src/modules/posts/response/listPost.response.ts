@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Types } from 'mongoose';
-import { PaginationMetadata } from '@src/common';
+import { BasePaginationResponse } from '@src/common';
 import { Keyword, Post } from '@src/infrastructure';
 import { PostAiStatus } from '@src/modules/posts/posts.constant';
 import { KeywordItem } from './keyword-list.response';
@@ -68,20 +68,10 @@ export class ListPostItem {
   }
 }
 
-export class ListPostResponse {
-  @ApiProperty({
-    type: PaginationMetadata,
-  })
-  metadata: PaginationMetadata;
-
+export class ListPostResponse extends BasePaginationResponse<ListPostItem> {
   @ApiProperty({
     type: ListPostItem,
     isArray: true,
   })
   list: ListPostItem[];
-
-  constructor(metadata: PaginationMetadata, items: ListPostItem[]) {
-    this.metadata = metadata;
-    this.list = items;
-  }
 }

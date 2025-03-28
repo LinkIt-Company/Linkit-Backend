@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { PaginationQuery, sum } from '@src/common';
+import { BasePaginationQuery, sum } from '@src/common';
 import { FolderRepository } from '../folders/folders.repository';
 import { PostsRepository } from '../posts/posts.repository';
 import { ClassficiationRepository } from './classification.repository';
@@ -29,7 +29,7 @@ export class ClassificationService {
     );
   }
 
-  async getPostList(userId: string, paingQuery: PaginationQuery) {
+  async getPostList(userId: string, paingQuery: BasePaginationQuery) {
     const { count, orderedFolderIdList } =
       await this.getFolderCountAndOrder(userId);
 
@@ -62,7 +62,7 @@ export class ClassificationService {
   async getPostListInFolder(
     userId: string,
     folderId: string,
-    paingQuery: PaginationQuery,
+    paingQuery: BasePaginationQuery,
   ) {
     const offset = (paingQuery.page - 1) * paingQuery.limit;
 

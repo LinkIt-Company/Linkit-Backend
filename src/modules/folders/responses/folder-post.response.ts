@@ -1,18 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PaginationMetadata } from '@src/common';
+import { BasePaginationResponse } from '@src/common';
 import { PostResponse } from './post.response';
 
-export class FolderPostResponse {
+export class FolderPostResponse extends BasePaginationResponse<PostResponse> {
   @ApiProperty({
-    type: PaginationMetadata,
+    type: PostResponse,
+    isArray: true,
   })
-  metadata: PaginationMetadata;
-
-  @ApiProperty({ type: PostResponse, isArray: true })
   list: PostResponse[];
-
-  constructor(metadata: PaginationMetadata, posts: PostResponse[]) {
-    this.metadata = metadata;
-    this.list = posts;
-  }
 }

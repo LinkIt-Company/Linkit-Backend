@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { GetUser, PaginationMetadata, PaginationQuery } from '@src/common';
+import { BasePaginationQuery, GetUser } from '@src/common';
 import { JwtGuard } from '../users/guards';
 import { ClassificationV2Service } from './classification.v2.service';
 import {
@@ -56,18 +56,17 @@ export class ClassificationV2Controller {
   @HttpCode(HttpStatus.OK)
   async getSuggestedPostList(
     @GetUser() userId: string,
-    @Query() pagingQuery: PaginationQuery,
+    @Query() pagingQuery: BasePaginationQuery,
   ): Promise<AIPostListResponse> {
     const { count, classificationPostList } =
       await this.classificationService.getPostList(userId, pagingQuery);
 
-    const metadata = new PaginationMetadata(
+    return new AIPostListResponse(
       pagingQuery.page,
       pagingQuery.limit,
       count,
+      classificationPostList,
     );
-
-    return new AIPostListResponse(metadata, classificationPostList);
   }
 
   @Get('/posts/:folderId')
@@ -75,7 +74,7 @@ export class ClassificationV2Controller {
   async getSuggestedPostListInFolder(
     @GetUser() userId: string,
     @Param('folderId') folderId: string,
-    @Query() pagingQuery: PaginationQuery,
+    @Query() pagingQuery: BasePaginationQuery,
   ): Promise<AIPostListResponse> {
     const { count, classificationPostList } =
       await this.classificationService.getPostListInFolder(
@@ -84,13 +83,12 @@ export class ClassificationV2Controller {
         pagingQuery,
       );
 
-    const metadata = new PaginationMetadata(
+    return new AIPostListResponse(
       pagingQuery.page,
       pagingQuery.limit,
       count,
+      classificationPostList,
     );
-
-    return new AIPostListResponse(metadata, classificationPostList);
   }
 
   @Patch('/posts')

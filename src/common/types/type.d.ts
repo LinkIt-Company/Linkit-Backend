@@ -1,5 +1,3 @@
-import { Types } from 'mongoose';
-
 // Exception Payload
 export type ExceptionPayload = {
   code?: string;
