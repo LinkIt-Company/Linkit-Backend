@@ -1,6 +1,14 @@
 # Dorabangs Node.js
 
-D질라고 Node.js Repository
+도라방스 Node.js Repository
+
+## 도라방스 노드팀 리뷰룰 ʜɪ⚞₍⑅ᐢ.ˬ.ᐢ₎
+
+- (˵ •̀ ᴗ - ˵ ) ✧ : 수정해 주세요
+
+- 〆(・∀・＠) : 의논 해 보고 싶어요
+
+- (/¯◡‿◡)/¯✧·˚ : _✧·˚ : _ : 그냥 의견이에요
 
 ## 구성원
 
@@ -34,3 +42,23 @@ D질라고 Node.js Repository
         </td>
     </tr>
 </table>
+
+## Project Init
+
+- Local Postgres Up/Down
+
+```
+pnpm (`pg:up` | `pg:down`)
+```
+
+- 마이그레이션 스크립트 생성
+
+```
+pnpm pg:makemigrations (마이그레이션 이름)
+```
+
+- 마이그레이션 sync
+
+```
+pnpm pg:migrate
+```

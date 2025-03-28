@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model User {
+  id          String @id @default(uuid())
+  deviceToken String @unique @map("device_token") @db.VarChar(20)
+
+  // Relations
+  folders           Folder[]
+  posts             Post[]
+  aiClassifications AIClassification[]
+
+  @@map("users")
+}
+
+enum FolderType {
+  custom
+  default
+}
+
+model Folder {
+  id        String     @id @default(uuid())
+  name      String     @db.VarChar(30)
+  type      FolderType
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  userId            String             @map("user_id")
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aiClassifications AIClassification[]
+  Post              Post[]
+
+  @@unique([name, userId])
+  @@map("folders")
+}
+
+enum PostAiStatus {
+  IN_PROGRES
+  SUCCESS
+  FAIL
+}
+
+model Post {
+  id                String    @id @default(uuid())
+  url               String    @db.VarChar(2048) // Standard Chrome Maximum URL length 
+  title             String    @db.VarChar(50)
+  description       String?   @db.VarChar(3000)
+  isFavorite        Boolean   @default(false) @map("is_favorite")
+  readAt            DateTime? @map("read_at")
+  thumbnailImageUrl String    @map("thumbnail_image_url") @db.Text()
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  userId             String            @map("user_id")
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId           String            @map("folder_id")
+  folder             Folder            @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  aiClassificationId String?           @unique @map("ai_classification_id")
+  aiClassification   AIClassification? @relation(fields: [aiClassificationId], references: [id], onDelete: SetNull)
+  postKeywords       PostKeyword[]
+
+  @@map("posts")
+}
+
+model AIClassification {
+  id          String    @id @default(uuid())
+  url         String    @db.VarChar(2048)
+  description String?   @db.VarChar(3000)
+  keywords    String[]  @default([])
+  completedAt DateTime? @map("completed_at")
+  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  suggested_folder_id String?
+  folder              Folder? @relation(fields: [suggested_folder_id], references: [id], onDelete: SetNull)
+  user_id             String
+  user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  posts               Post?
+
+  @@map("ai_classifications")
+}
+
+model PostKeyword {
+  id String @id @default(uuid())
+
+  // Relations
+  postId    String  @map("post_id")
+  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  keywordId String  @map("keyword_id")
+  keyword   Keyword @relation(fields: [keywordId], references: [id], onDelete: Restrict)
+
+  @@map("post_keywords")
+}
+
+model Keyword {
+  id   String @id @default(uuid())
+  name String @db.VarChar(100)
+
+  // Relations
+  postKeywords PostKeyword[]
+
+  @@map("keywords")
+}

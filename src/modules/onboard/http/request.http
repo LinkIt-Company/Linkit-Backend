@@ -1,0 +1,5 @@
+### get onboard all categories
+GET http://localhost:3000/onboard
+
+### get onboard limited categories
+GET http://localhost:3000/onboard?limit=5

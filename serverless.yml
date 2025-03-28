@@ -1,0 +1,42 @@
+service: dorabangs-node
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-northeast-2
+  architecture: arm64
+
+custom:
+  dotenv:
+    basePath: ./
+  optimize:
+    external: ['swagger-ui-dist']
+
+functions:
+  server:
+    handler: dist/index.handler
+    timeout: 30
+    events:
+      - http:
+          method: any
+          path: '/'
+          cors:
+            origin: '*'
+      - http:
+          method: any
+          path: '{proxy+}'
+          cors:
+            origin: '*'
+  aiWorker:
+    handler: worker-dist/index.handler
+    timeout: 30
+
+package:
+  exclude:
+    - '**/*'
+  include:
+    - 'dist/**'
+    - 'worker-dist/**'

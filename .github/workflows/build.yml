@@ -1,0 +1,30 @@
+name: Application Build Test
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'src/**'
+      - '.github/workflows/**'
+run-name: Application Build Test
+jobs:
+  build:
+    name: Build Test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v4
+      - name: Node.js runtime setting
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: pnpm settings
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
+      - name: Install dependencies
+        run: pnpm install
+      - name: Check Application Build
+        run: pnpm build

@@ -1,0 +1,18 @@
+feature:
+  - head-branch: ['^feature', 'feature', '^feat', 'feat']
+fix:
+  - head-branch: ['^fix', 'fix']
+refactor:
+  - head-branch: ['^refactor', 'refactor']
+test:
+  - head-branch: ['^test', 'test']
+etc:
+  - head-branch: ['^chore', 'chore']
+actions:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**'
+document:
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.md', '!.github/**']
+release:
+  - base-branch: 'main'

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dorabangs Linkit Launching Day</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #ffffff;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #container {
+        text-align: center;
+        background: linear-gradient(to bottom right, #cddbff, #c4fff8);
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+        position: relative;
+        color: white;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      input {
+        padding: 12px;
+        margin: 8px;
+        border-radius: 5px;
+        border: 1px solid #ffffff;
+        width: calc(100% - 30px);
+        font-size: 14px;
+      }
+
+      button {
+        padding: 12px 20px;
+        margin: 8px;
+        border: none;
+        border-radius: 5px;
+        background-color: #9fd3fd;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #a8b2fd;
+      }
+
+      /* Table styles */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        border: 1px solid #e0f2f1;
+        padding: 10px;
+        text-align: center;
+        font-size: 14px;
+        color: black;
+      }
+
+      th {
+        background-color: #a396f9;
+        color: white;
+      }
+
+      /* Loading animation styles */
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 10;
+      }
+
+      .loading.hidden {
+        display: none;
+      }
+
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #83f19b;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 1.5s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>도라방스-Linkit: AI 따라잡기 챌린지</h1>
+      <form id="apiForm">
+        <input type="text" id="name" placeholder="Name" required />
+        <input type="text" id="keywords" placeholder="Keywords" required />
+        <input type="url" id="link" placeholder="Link" required />
+        <button type="submit">Send</button>
+      </form>
+      <div id="resultContainer">
+        <!-- Results Table will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Custom Loading Animation -->
+    <div id="loading" class="loading hidden">
+      <div class="loader"></div>
+    </div>
+
+    <script>
+      const results = []; // Array to store all received results
+
+      document
+        .getElementById('apiForm')
+        .addEventListener('submit', async function (e) {
+          e.preventDefault();
+
+          const name = encodeURIComponent(
+            document.getElementById('name').value,
+          );
+          const keywords = encodeURIComponent(
+            document.getElementById('keywords').value,
+          );
+          const link = encodeURIComponent(
+            document.getElementById('link').value,
+          );
+
+          const loadingElement = document.getElementById('loading');
+          const resultContainer = document.getElementById('resultContainer');
+
+          // Show loading animation
+          loadingElement.classList.remove('hidden');
+
+          try {
+            // Construct the URL with query parameters
+            const url = `http://localhost:3000/launching-events?name=${name}&keywords=${keywords}&link=${link}`;
+
+            // Make the GET request
+            const response = await fetch(url, {
+              method: 'GET',
+            });
+
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+
+            const { data } = await response.json(); // Assume each API call returns a single result
+
+            // Add new result to the results array
+            results.push(data);
+
+            // Sort results by score in descending order
+            const sortedResults = results.sort((a, b) => b.score - a.score);
+
+            // Clear previous results and display the sorted ones in a table
+            resultContainer.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${sortedResults
+                .map(
+                  (result) => `
+                <tr>
+                  <td>${result.name}</td>
+                  <td>${result.score.toFixed(2)}</td>
+                  <td><a href="${link}" target="_blank">${decodeURIComponent(link)}</a></td>
+                </tr>
+              `,
+                )
+                .join('')}
+            </tbody>
+          </table>
+        `;
+          } catch (error) {
+            console.error('Error fetching API:', error);
+            resultContainer.innerHTML =
+              '<p style="color:red;">Failed to fetch results. Please try again.</p>';
+          } finally {
+            // Hide loading animation
+            loadingElement.classList.add('hidden');
+          }
+        });
+    </script>
+  </body>
+</html>
