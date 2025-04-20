@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Keyword } from '@src/infrastructure/database/entities/keyword.entity';
 
 @Injectable()
-export class KeywordsRepository extends Repository<Keyword> {
+export class KeywordsPGRepository extends Repository<Keyword> {
   constructor(private dataSource: DataSource) {
     super(Keyword, dataSource.createEntityManager());
   }

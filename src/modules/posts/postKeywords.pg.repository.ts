@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { PostKeyword } from '@src/infrastructure/database/entities/post-keyword.entity';
 
 @Injectable()
-export class PostKeywordsRepository extends Repository<PostKeyword> {
+export class PostKeywordsPGRepository extends Repository<PostKeyword> {
   constructor(private dataSource: DataSource) {
     super(PostKeyword, dataSource.createEntityManager());
   }
