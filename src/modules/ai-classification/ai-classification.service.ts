@@ -7,6 +7,7 @@ import { FolderType } from '@src/infrastructure/database/types/folder-type.enum'
 import { PuppeteerPoolService } from '@src/infrastructure/puppeteer-pool/puppeteer-pool.service';
 import { ClassficiationRepository } from '../classification/classification.repository';
 import { FolderRepository } from '../folders/folders.repository';
+import { KeywordsPGRepository } from '../keywords/keyword.pg.repository';
 import { KeywordsRepository } from '../keywords/keyword.repository';
 import { MetricsRepository } from '../metrics/metrics.repository';
 import { PostKeywordsRepository } from '../posts/postKeywords.repository';
@@ -22,6 +23,7 @@ export class AiClassificationService {
     private readonly folderRepository: FolderRepository,
     private readonly postRepository: PostsRepository,
     private readonly keywordsRepository: KeywordsRepository,
+    private readonly keywordsPgRepository: KeywordsPGRepository,
     private readonly postKeywordsRepository: PostKeywordsRepository,
     private readonly metricsRepository: MetricsRepository,
     private readonly puppeteer: PuppeteerPoolService,
