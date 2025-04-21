@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Keyword } from '@src/infrastructure';
 import { Model } from 'mongoose';
+import { Keyword } from '@src/infrastructure';
 
 @Injectable()
 export class KeywordsRepository {

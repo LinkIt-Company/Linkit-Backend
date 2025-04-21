@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Keyword } from '@src/infrastructure/database/entities/keyword.entity';
 import { DataSource, Repository } from 'typeorm';
+import { Keyword } from '@src/infrastructure/database/entities/keyword.entity';
 
 @Injectable()
 export class KeywordsPGRepository extends Repository<Keyword> {
