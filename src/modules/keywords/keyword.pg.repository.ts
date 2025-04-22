@@ -10,8 +10,9 @@ export class KeywordsPGRepository extends Repository<Keyword> {
 
   async createMany(keywords: string[]) {
     const entities = keywords.map((keyword) => {
-      const entity = new Keyword();
-      entity.name = keyword;
+      const entity = this.create({
+        name: keyword,
+      });
       return entity;
     });
 
