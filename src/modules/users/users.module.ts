@@ -17,6 +17,7 @@ import { UsersController } from './users.controller';
 import { UsersPGRepository } from './users.pg.repository';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
+import { UsersV2Controller } from './users.v2.controller';
 import { UsersV2Service } from './users.v2.service';
 
 @Module({
@@ -29,7 +30,7 @@ import { UsersV2Service } from './users.v2.service';
       { name: FolderMongoEntity.name, schema: FolderSchema },
     ]),
   ],
-  controllers: [UsersController],
+  controllers: [UsersController, UsersV2Controller],
   providers: [
     UsersV2Service,
     UsersPGRepository,

@@ -6,7 +6,7 @@ import { UsersV2Service } from './users.v2.service';
 
 @UserControllerDocs
 @Controller({ version: '2', path: 'users' })
-export class UsersController {
+export class UsersV2Controller {
   constructor(private readonly userService: UsersV2Service) {}
 
   @Post()
