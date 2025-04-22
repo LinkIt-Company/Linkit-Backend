@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto';
 import { CreateUserResponse } from './response';
 import { UsersService } from './users.service';
 
-@Controller('users')
+@Controller({ version: '1', path: 'users' })
 @UserControllerDocs
 export class UsersController {
   constructor(private readonly userService: UsersService) {}

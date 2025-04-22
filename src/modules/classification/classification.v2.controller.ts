@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BasePaginationQuery, GetUser } from '@src/common';
-import { JwtGuard } from '../users/guards';
+import { JwtV2Guard } from '../users/guards/jwt.v2.guard';
 import { ClassificationV2Service } from './classification.v2.service';
 import {
   ClassificationControllerDocs,
@@ -27,7 +27,7 @@ import { AIFolderNameListResponse } from './response/ai-folder-list.dto';
 import { AIPostListResponse } from './response/ai-post-list.dto';
 
 @Controller({ version: '2', path: 'classification' })
-@UseGuards(JwtGuard)
+@UseGuards(JwtV2Guard)
 @ClassificationControllerDocs
 export class ClassificationV2Controller {
   constructor(

@@ -13,6 +13,7 @@ import { AuthModule } from '../auth/auth.module';
 import { FoldersPGRepository } from '../folders/folders.pg.repository';
 import { FolderRepository } from '../folders/folders.repository';
 import { JwtStrategy } from './guards/strategy';
+import { JwtV2Strategy } from './guards/strategy/jwt.v2.strategy';
 import { UsersController } from './users.controller';
 import { UsersPGRepository } from './users.pg.repository';
 import { UsersRepository } from './users.repository';
@@ -35,9 +36,10 @@ import { UsersV2Service } from './users.v2.service';
     UsersV2Service,
     UsersPGRepository,
     FoldersPGRepository,
-    JwtStrategy,
+    JwtV2Strategy,
 
     /** @deprecated */
+    JwtStrategy,
     UsersService,
     UsersRepository,
     FolderRepository,

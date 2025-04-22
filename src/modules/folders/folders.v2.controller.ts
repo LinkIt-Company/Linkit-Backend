@@ -13,7 +13,7 @@ import { GetUser } from '@src/common';
 import { ClassificationV2Service } from '../classification/classification.v2.service';
 import { GetPostQueryDto } from '../posts/dto/find-in-folder.dto';
 import { PostsService } from '../posts/posts.service';
-import { JwtGuard } from '../users/guards/jwt.guard';
+import { JwtV2Guard } from '../users/guards/jwt.v2.guard';
 import {
   CreateFolderDocs,
   DeleteFolderDocs,
@@ -33,7 +33,7 @@ import {
 import { PostResponse } from './responses/post.response';
 
 @FolderControllerDocs
-@UseGuards(JwtGuard)
+@UseGuards(JwtV2Guard)
 @Controller({ version: '2', path: 'folders' })
 export class FoldersV2Controller {
   constructor(

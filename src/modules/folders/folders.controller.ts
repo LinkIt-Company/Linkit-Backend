@@ -34,7 +34,7 @@ import { PostResponse } from './responses/post.response';
 
 @FolderControllerDocs
 @UseGuards(JwtGuard)
-@Controller('folders')
+@Controller({ version: '1', path: 'folders' })
 export class FoldersController {
   constructor(
     private readonly foldersService: FoldersService,
