@@ -10,10 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from '@src/common';
-import { ClassificationService } from '@src/modules/classification/classification.service';
+import { ClassificationV2Service } from '../classification/classification.v2.service';
 import { GetPostQueryDto } from '../posts/dto/find-in-folder.dto';
 import { PostsService } from '../posts/posts.service';
-import { JwtGuard } from '../users/guards';
+import { JwtGuard } from '../users/guards/jwt.guard';
 import {
   CreateFolderDocs,
   DeleteFolderDocs,
@@ -24,7 +24,7 @@ import {
   UpdateFolderDocs,
 } from './docs';
 import { CreateFolderDto, DeleteCustomFolderDto, UpdateFolderDto } from './dto';
-import { FoldersService } from './folders.service';
+import { FoldersV2Service } from './folders.v2.service';
 import {
   FolderListResponse,
   FolderPostResponse,
@@ -34,12 +34,12 @@ import { PostResponse } from './responses/post.response';
 
 @FolderControllerDocs
 @UseGuards(JwtGuard)
-@Controller('folders')
+@Controller({ version: '2', path: 'folders' })
 export class FoldersV2Controller {
   constructor(
-    private readonly foldersService: FoldersService,
+    private readonly foldersService: FoldersV2Service,
     private readonly postsService: PostsService,
-    private readonly classificationService: ClassificationService,
+    private readonly classificationService: ClassificationV2Service,
   ) {}
 
   @CreateFolderDocs
@@ -125,9 +125,9 @@ export class FoldersV2Controller {
   @DeleteFolderDocs
   @Delete(':folderId')
   async remove(@GetUser() userId: string, @Param('folderId') folderId: string) {
-    await this.classificationService.deleteClassificationBySuggestedFolderId(
+    await this.classificationService.deleteClassificationBySuggestedFolderId([
       folderId,
-    );
+    ]);
     await this.foldersService.remove(userId, folderId);
     await this.postsService.removePostListByFolderId(userId, folderId);
   }

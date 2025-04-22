@@ -38,6 +38,6 @@ import { ClassificationV2Service } from './classification.v2.service';
     FolderRepository,
     FoldersPGRepository,
   ],
-  exports: [ClassificationService],
+  exports: [ClassificationService, ClassificationV2Service],
 })
 export class ClassificationModule {}

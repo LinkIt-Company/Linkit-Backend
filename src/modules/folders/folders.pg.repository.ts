@@ -26,17 +26,14 @@ export class FoldersPGRepository extends Repository<Folder> {
   }
 
   async createMany(
-    folders: { userId: string; name: string; type: FolderType }[],
+    folderData: { userId: string; name: string; type: FolderType }[],
   ) {
-    const createdFolders = await this.insert(
-      folders.map((folder) => {
-        return {
-          ...folder,
-          visible: true,
-        };
-      }),
+    const folders = this.create(
+      folderData.map((folder) => ({ ...folder, visible: true })),
     );
-    return createdFolders;
+    await this.insert(folders);
+
+    return folders;
   }
 
   async findByUserId(userId: string, onlyVisible = true) {
