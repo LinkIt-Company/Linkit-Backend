@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FilterQuery } from 'mongoose';
 import { DataSource, FindOptionsWhere, IsNull, Not, Repository } from 'typeorm';
 import { OrderType } from '@src/common';
 import { Post } from '@src/infrastructure/database/entities/post.entity';
@@ -19,21 +18,22 @@ export class PostsPGRepository extends Repository<Post> {
     isFavorite?: boolean,
     isRead?: boolean,
   ) {
-    const queryFilter: FilterQuery<Post> = {
-      userId: userId,
+    const where: FindOptionsWhere<Post> = {
+      userId,
     };
+
     if (isFavorite) {
-      queryFilter['isFavorite'] = true;
+      where.isFavorite = true;
     }
 
     if (isRead) {
-      queryFilter['readAt'] = { $ne: null };
+      where.readAt = Not(IsNull());
     } else if (isRead === false) {
-      queryFilter['readAt'] = null;
+      where.readAt = IsNull();
     }
 
-    const userPostCount = await this.count({ where: queryFilter });
-    return userPostCount;
+    const count = await this.count({ where });
+    return count;
   }
 
   async listPost(
@@ -43,7 +43,7 @@ export class PostsPGRepository extends Repository<Post> {
     isFavorite?: boolean,
     order = OrderType.desc,
     isRead?: boolean,
-  ) {
+  ): Promise<Post[]> {
     // Skip Query
     const skipQuery = (page - 1) * limit;
     const queryFilter: FindOptionsWhere<Post> = {
