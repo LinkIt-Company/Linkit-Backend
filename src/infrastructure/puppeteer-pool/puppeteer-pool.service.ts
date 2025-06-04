@@ -26,6 +26,9 @@ export class PuppeteerPoolService {
 
   async invokeRemoteSessionParser(url: string) {
     try {
+      // https://developer.mozilla.org/ko/docs/Web/API/AbortController
+      const controller = new AbortController();
+      const timeOut = setTimeout(() => controller.abort(), 10000);
       const response = await fetch(this.puppeteerURL, {
         method: 'POST',
         headers: {
@@ -33,8 +36,10 @@ export class PuppeteerPoolService {
         },
         body: JSON.stringify({
           url: url,
-        }), // JSON 데이터를 문자열로 변환
+        }),
+        signal: controller.signal,
       });
+      clearTimeout(timeOut);
       if (!response.ok) {
         return {
           ok: false,

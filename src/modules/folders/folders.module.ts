@@ -1,7 +1,14 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Folder, FolderSchema, Post, PostSchema } from '@src/infrastructure';
+import { Folder } from '@src/infrastructure/database/entities/folder.entity';
+import { Post } from '@src/infrastructure/database/entities/post.entity';
+import {
+  Folder as FolderMongoEntity,
+  FolderSchema,
+  Post as PostMongoEntity,
+  PostSchema,
+} from '@src/infrastructure/database/schema';
 import { ClassificationModule } from '@src/modules/classification/classification.module';
 import { PostsPGRepository } from '@src/modules/posts/posts.pg.repository';
 import { PostsModule } from '../posts/posts.module';
@@ -15,10 +22,11 @@ import { FoldersV2Service } from './folders.v2.service';
 @Module({
   imports: [
     ClassificationModule,
-    TypeOrmModule.forFeature([FoldersPGRepository, PostsPGRepository]),
+    TypeOrmModule.forFeature([Folder, Post]),
+    /** @deprecated */
     MongooseModule.forFeature([
-      { name: Post.name, schema: PostSchema },
-      { name: Folder.name, schema: FolderSchema },
+      { name: PostMongoEntity.name, schema: PostSchema },
+      { name: FolderMongoEntity.name, schema: FolderSchema },
     ]),
     PostsModule,
   ],
@@ -26,8 +34,10 @@ import { FoldersV2Service } from './folders.v2.service';
   providers: [
     FoldersService,
     FoldersV2Service,
-    FolderRepository,
     FoldersPGRepository,
+    PostsPGRepository,
+    /** @deprecated */
+    FolderRepository,
   ],
   exports: [FoldersService, FoldersV2Service, FoldersPGRepository],
 })

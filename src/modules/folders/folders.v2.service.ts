@@ -34,7 +34,7 @@ export class FoldersV2Service {
       name,
       type: FolderType.CUSTOM,
     }));
-    const createdFolders = this.folderRepository.createMany(folders);
+    const createdFolders = await this.folderRepository.createMany(folders);
     return createdFolders;
   }
 

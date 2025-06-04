@@ -20,6 +20,7 @@ import {
 import { PuppeteerPoolModule } from '@src/infrastructure/puppeteer-pool/puppeteer-pool.module';
 import { ClassficiationRepository } from '../classification/classification.repository';
 import { FolderRepository } from '../folders/folders.repository';
+import { KeywordsPGRepository } from '../keywords/keyword.pg.repository';
 import { KeywordsRepository } from '../keywords/keyword.repository';
 import { MetricsRepository } from '../metrics/metrics.repository';
 import { PostKeywordsRepository } from '../posts/postKeywords.repository';
@@ -45,6 +46,7 @@ import { AiClassificationService } from './ai-classification.service';
     FolderRepository,
     PostsRepository,
     KeywordsRepository,
+    KeywordsPGRepository,
     PostKeywordsRepository,
     MetricsRepository,
   ],
