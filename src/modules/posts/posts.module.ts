@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   AIClassification,
   AIClassificationSchema,
@@ -14,10 +15,15 @@ import {
   PostKeyword,
   PostKeywordSchema,
 } from '@src/infrastructure/database/schema/postKeyword.schema';
+import { FoldersModule } from '@src/modules/folders/folders.module';
+import { FoldersPGRepository } from '@src/modules/folders/folders.pg.repository';
+import { FolderRepository } from '@src/modules/folders/folders.repository';
+import { PostKeywordsPGRepository } from '@src/modules/posts/postKeywords.pg.repository';
 import { PostsRepository } from '@src/modules/posts/posts.repository';
+import { PostsV2Controller } from '@src/modules/posts/posts.v2.controller';
+import { PostsV2Service } from '@src/modules/posts/posts.v2.service';
 import { UsersModule } from '@src/modules/users/users.module';
 import { AiClassificationModule } from '../ai-classification/ai-classification.module';
-import { FolderRepository } from '../folders/folders.repository';
 import { PostKeywordsRepository } from './postKeywords.repository';
 import { PostsController } from './posts.controller';
 import { PostsPGRepository } from './posts.pg.repository';
@@ -31,11 +37,17 @@ import { PostsService } from './posts.service';
       { name: AIClassification.name, schema: AIClassificationSchema },
       { name: PostKeyword.name, schema: PostKeywordSchema },
     ]),
+    TypeOrmModule.forFeature([
+      PostsPGRepository,
+      PostKeywordsPGRepository,
+      FoldersPGRepository,
+    ]),
     UsersModule,
     AwsLambdaModule,
     AiClassificationModule,
+    forwardRef(() => FoldersModule),
   ],
-  controllers: [PostsController],
+  controllers: [PostsController, PostsV2Controller],
   providers: [
     PostsService,
     PostsRepository,
@@ -43,7 +55,16 @@ import { PostsService } from './posts.service';
     AwsLambdaService,
     PostKeywordsRepository,
     PostsPGRepository,
+    FoldersPGRepository,
+    PostKeywordsPGRepository,
+    PostsV2Service,
   ],
-  exports: [PostsService, PostsRepository, PostsPGRepository],
+  exports: [
+    PostsService,
+    PostsRepository,
+    PostsV2Service,
+    PostsPGRepository,
+    PostKeywordsRepository,
+  ],
 })
 export class PostsModule {}

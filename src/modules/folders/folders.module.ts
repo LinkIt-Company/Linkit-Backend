@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Folder, FolderSchema, Post, PostSchema } from '@src/infrastructure';
 import { ClassificationModule } from '@src/modules/classification/classification.module';
+import { PostsPGRepository } from '@src/modules/posts/posts.pg.repository';
 import { PostsModule } from '../posts/posts.module';
-import { PostsPGRepository } from '../posts/posts.pg.repository';
 import { FoldersController } from './folders.controller';
 import { FoldersPGRepository } from './folders.pg.repository';
 import { FolderRepository } from './folders.repository';
@@ -23,6 +23,12 @@ import { FoldersV2Service } from './folders.v2.service';
     PostsModule,
   ],
   controllers: [FoldersController, FoldersV2Controller],
-  providers: [FoldersService, FoldersV2Service, FolderRepository],
+  providers: [
+    FoldersService,
+    FoldersV2Service,
+    FolderRepository,
+    FoldersPGRepository,
+  ],
+  exports: [FoldersService, FoldersV2Service, FoldersPGRepository],
 })
 export class FoldersModule {}
