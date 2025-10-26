@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, In } from 'typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { PostKeyword } from '@src/infrastructure/database/entities/post-keyword.entity';
 
 @Injectable()
@@ -27,7 +26,7 @@ export class PostKeywordsPGRepository extends Repository<PostKeyword> {
     });
   }
 
-  async findKeywordsByPostIds(postIds: string[]) {
+  async findKeywordsByPostIds(postIds: string[]): Promise<PostKeyword[]> {
     return await this.find({
       where: {
         postId: In(postIds),
