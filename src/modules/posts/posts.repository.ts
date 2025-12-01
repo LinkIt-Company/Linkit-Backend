@@ -8,6 +8,8 @@ import { ClassificationPostList } from '../classification/dto/classification.dto
 import { P001 } from './error';
 import { PostUpdateableFields } from './type/type';
 
+export type LeanPost = Post & { _id: Types.ObjectId };
+
 @Injectable()
 export class PostsRepository {
   constructor(
@@ -45,7 +47,7 @@ export class PostsRepository {
     isFavorite?: boolean,
     order = OrderType.desc,
     isRead?: boolean,
-  ) {
+  ): Promise<LeanPost[]> {
     // Skip Query
     const skipQuery = (page - 1) * limit;
     const queryFilter: FilterQuery<Post> = {
@@ -61,17 +63,17 @@ export class PostsRepository {
     } else if (isRead === false) {
       queryFilter['readAt'] = null;
     }
-    const posts = await this.postModel
+    const posts = (await this.postModel
       .find(queryFilter)
       .sort([['createdAt', order === OrderType.desc ? -1 : 1]])
       .skip(skipQuery)
       .limit(limit)
-      .lean();
+      .lean()) as LeanPost[];
     return posts;
   }
 
-  async findPostOrThrow(param: FilterQuery<PostDocument>) {
-    const post = await this.postModel.findOne(param).lean();
+  async findPostOrThrow(param: FilterQuery<PostDocument>): Promise<LeanPost> {
+    const post = await this.postModel.findOne(param).lean<LeanPost>();
     if (!post) {
       throw new NotFoundException(P001);
     }
@@ -116,7 +118,7 @@ export class PostsRepository {
     title: string,
     thumbnail: string,
     postAIStatus: PostAiStatus,
-  ) {
+  ): Promise<LeanPost> {
     const postModel = await this.postModel.create({
       folderId: folderId,
       url: url,
@@ -126,7 +128,7 @@ export class PostsRepository {
       thumbnailImgUrl: thumbnail,
       aiStatus: postAIStatus,
     });
-    return postModel.toObject();
+    return postModel.toObject() as LeanPost;
   }
 
   async getPostCountByFolderIds(folderIds: Types.ObjectId[]) {
@@ -229,7 +231,7 @@ export class PostsRepository {
     limit: number,
     order: OrderType = OrderType.desc,
     isRead?: boolean,
-  ) {
+  ): Promise<LeanPost[]> {
     const offset = (page - 1) * limit;
     const queryFilter: FilterQuery<Post> = {
       folderId: folderId,
@@ -241,12 +243,12 @@ export class PostsRepository {
       queryFilter['readAt'] = null;
     }
 
-    const folders = await this.postModel
+    const folders = (await this.postModel
       .find(queryFilter)
       .skip(offset)
       .sort([['createdAt', order === OrderType.desc ? -1 : 1]])
       .limit(limit)
-      .lean();
+      .lean()) as LeanPost[];
 
     return folders;
   }
@@ -410,12 +412,12 @@ export class PostsRepository {
     return updateResult;
   }
 
-  async findPostByIdForAIClassification(postId: string) {
+  async findPostByIdForAIClassification(postId: string): Promise<LeanPost> {
     const post = await this.postModel
       .findOne({
         _id: postId,
       })
-      .lean();
+      .lean<LeanPost>();
     if (!post) {
       throw new NotFoundException('Post를 찾을 수 없습니다.');
     }

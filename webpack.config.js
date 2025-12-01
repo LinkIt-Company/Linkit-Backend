@@ -1,7 +1,7 @@
-import CopyPlugin from 'copy-webpack-plugin';
-import * as path from 'path';
-import * as webpack from 'webpack';
-import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
+const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 
 const swaggerUiModulePath = path.dirname(require.resolve('swagger-ui-dist'));
 
@@ -81,6 +81,12 @@ module.exports = {
   ],
   externals: {
     '@aws-sdk': '@aws-sdk',
+    'adminjs': 'commonjs adminjs',
+    '@adminjs/express': 'commonjs @adminjs/express',
+    '@adminjs/typeorm': 'commonjs @adminjs/typeorm',
+    '@adminjs/design-system': 'commonjs @adminjs/design-system',
+    'express-session': 'commonjs express-session',
+    'tslib': 'commonjs tslib',
   },
   resolve: {
     extensions: ['.ts', '.js'],

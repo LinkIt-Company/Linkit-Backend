@@ -18,13 +18,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: pnpm settings
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile]
+          cache: yarn
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
       - name: Check Application Build
-        run: pnpm build
+        run: yarn build
