@@ -6,6 +6,7 @@ import { DatabaseModule } from '@src/infrastructure';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './common/middlewares';
+import { AdminJSModule } from './infrastructure/admin/admin.module';
 import { AiModule } from './infrastructure/ai/ai.module';
 import { AwsLambdaModule } from './infrastructure/aws-lambda/aws-lambda.module';
 import { DiscordModule } from './infrastructure/discord/discord.module';
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     DatabaseModule,
     DiscordModule,
     AiModule,
+    AdminJSModule,
     UsersModule,
     ClassificationModule,
     AuthModule,

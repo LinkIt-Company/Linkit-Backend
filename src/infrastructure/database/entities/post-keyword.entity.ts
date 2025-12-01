@@ -5,11 +5,12 @@ import {
   PrimaryColumn,
   Relation,
 } from 'typeorm';
+import { BaseEntity } from './base.entity';
 import { Keyword } from './keyword.entity';
 import { Post } from './post.entity';
 
 @Entity('post_keywords')
-export class PostKeyword {
+export class PostKeyword extends BaseEntity {
   @PrimaryColumn({ name: 'post_id' })
   postId: string;
 

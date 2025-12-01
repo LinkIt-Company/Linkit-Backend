@@ -10,7 +10,7 @@ export async function bootstrap() {
   const app = await NestFactory.create(
     AppModule,
     new ExpressAdapter(expressInstance),
-    { cors: true },
+    { cors: true, bodyParser: false },
   );
 
   // Config Nest.js Application
