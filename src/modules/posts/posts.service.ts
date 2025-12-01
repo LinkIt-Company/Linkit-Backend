@@ -9,10 +9,7 @@ import { AiClassificationPayload } from '@src/infrastructure/aws-lambda/type';
 import { FolderType } from '@src/infrastructure/database/types/folder-type.enum';
 import { CreatePostDto } from '@src/modules/posts/dto/create-post.dto';
 import { PostAiStatus } from '@src/modules/posts/posts.constant';
-import {
-  LeanPost,
-  PostsRepository,
-} from '@src/modules/posts/posts.repository';
+import { LeanPost, PostsRepository } from '@src/modules/posts/posts.repository';
 import { AiClassificationService } from '../ai-classification/ai-classification.service';
 import { FolderRepository } from '../folders/folders.repository';
 import {
