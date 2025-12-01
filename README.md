@@ -48,17 +48,17 @@
 - Local Postgres Up/Down
 
 ```
-pnpm (`pg:up` | `pg:down`)
+yarn (`pg:up` | `pg:down`)
 ```
 
 - 마이그레이션 스크립트 생성
 
 ```
-pnpm pg:makemigrations (마이그레이션 이름)
+yarn pg:makemigrations (마이그레이션 이름)
 ```
 
 - 마이그레이션 sync
 
 ```
-pnpm pg:migrate
+yarn pg:migrate
 ```

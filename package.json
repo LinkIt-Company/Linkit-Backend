@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "prebuild:worker": "if [ -d worker-dist ]; then rm -r worker-dist; fi",
     "build": "npx webpack",
-    "build:worker": "pnpm run prebuild:worker && npx webpack -c worker-webpack.config.ts",
+    "build:worker": "yarn prebuild:worker && npx webpack -c worker-webpack.config.ts",
     "deploy": "npm run build && sls deploy function -f server && npm run postdeploy",
     "deploy:worker": "npm run build:worker && sls deploy function -f aiWorker && npm run postdeploy",
     "deploy:all": "npm run build && npm run build:worker && sls deploy && npm run postdeploy",
@@ -125,5 +125,5 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "packageManager": "pnpm@9.4.0"
+  "packageManager": "yarn@1.22.22"
 }
