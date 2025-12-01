@@ -9,7 +9,7 @@ import { AiClassificationPayload } from '@src/infrastructure/aws-lambda/type';
 import { FolderType } from '@src/infrastructure/database/types/folder-type.enum';
 import { CreatePostDto } from '@src/modules/posts/dto/create-post.dto';
 import { PostAiStatus } from '@src/modules/posts/posts.constant';
-import { PostsRepository } from '@src/modules/posts/posts.repository';
+import { LeanPost, PostsRepository } from '@src/modules/posts/posts.repository';
 import { AiClassificationService } from '../ai-classification/ai-classification.service';
 import { FolderRepository } from '../folders/folders.repository';
 import {
@@ -19,7 +19,10 @@ import {
   UpdatePostFolderDto,
 } from './dto';
 import { GetPostQueryDto } from './dto/find-in-folder.dto';
-import { PostKeywordsRepository } from './postKeywords.repository';
+import {
+  PopulatedPostKeyword,
+  PostKeywordsRepository,
+} from './postKeywords.repository';
 import { PostItemDto } from './response';
 
 @Injectable()
@@ -149,7 +152,10 @@ export class PostsService {
     };
   }
 
-  async readPost(userId: string, postId: string) {
+  async readPost(
+    userId: string,
+    postId: string,
+  ): Promise<{ post: LeanPost; keywords: PopulatedPostKeyword[] }> {
     const post = await this.postRepository.findPostOrThrow({
       _id: postId,
       userId: userId,
@@ -233,9 +239,7 @@ export class PostsService {
     return customFolderIds.map((folder) => folder.toString());
   }
 
-  private async organizeFolderWithKeywords(
-    posts: (FlattenMaps<Post> & { _id: Types.ObjectId })[],
-  ) {
+  private async organizeFolderWithKeywords(posts: LeanPost[]) {
     const postIds = posts.map((post) => post._id.toString());
     const postKeywords =
       await this.postKeywordsRepository.findKeywordsByPostIds(postIds);

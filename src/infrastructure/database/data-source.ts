@@ -1,7 +1,10 @@
 import dotenv from 'dotenv';
+import { join } from 'path';
 import { DataSource } from 'typeorm';
 
 dotenv.config();
+
+const migrationsGlob = join(__dirname, 'migrations/*{.ts,.js}');
 
 export const dbConfig: any = {
   type: 'postgres',
@@ -13,7 +16,7 @@ export const dbConfig: any = {
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   synchronize: process.env.DB_SYNC,
   logging: process.env.DB_LOGGING,
-  migrations: ['**/migrations/*.ts'],
+  migrations: [migrationsGlob],
 };
 
 export const AppDataSource = new DataSource(dbConfig);

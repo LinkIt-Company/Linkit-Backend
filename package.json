@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "prebuild:worker": "if [ -d worker-dist ]; then rm -r worker-dist; fi",
     "build": "npx webpack",
-    "build:worker": "pnpm run prebuild:worker && npx webpack -c worker-webpack.config.ts",
+    "build:worker": "yarn prebuild:worker && npx webpack -c worker-webpack.config.ts",
     "deploy": "npm run build && sls deploy function -f server && npm run postdeploy",
     "deploy:worker": "npm run build:worker && sls deploy function -f aiWorker && npm run postdeploy",
     "deploy:all": "npm run build && npm run build:worker && sls deploy && npm run postdeploy",
@@ -48,6 +48,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@sentry/node": "^8.9.2",
     "@sentry/profiling-node": "^8.9.2",
+    "@tiptap/pm": "^3.11.1",
     "@types/dotenv": "^8.2.3",
     "adminjs": "6.8.7",
     "aws-lambda": "^1.0.7",
@@ -58,6 +59,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "express": "^4.19.2",
+    "express-formidable": "^1.2.0",
     "express-session": "^1.18.2",
     "iconv-lite": "^0.6.3",
     "js-tiktoken": "^1.0.14",
@@ -131,5 +133,5 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "packageManager": "pnpm@9.4.0"
+  "packageManager": "yarn@1.22.22"
 }

@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migration1760878954669 implements MigrationInterface {
-  name = 'Migration1760878954669';
+export class Migration1764591609850 implements MigrationInterface {
+  name = 'Migration1764591609850';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,7 +11,7 @@ export class Migration1760878954669 implements MigrationInterface {
       `CREATE TABLE "keywords" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying NOT NULL, CONSTRAINT "PK_4aa660a7a585ed828da68f3c28e" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "post_keywords" ("post_id" uuid NOT NULL, "keyword_id" uuid NOT NULL, CONSTRAINT "PK_69a48d837cede997cb0d949fc84" PRIMARY KEY ("post_id", "keyword_id"))`,
+      `CREATE TABLE "post_keywords" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "post_id" uuid NOT NULL, "keyword_id" uuid NOT NULL, CONSTRAINT "PK_14416d735343e53c4bb3052beb4" PRIMARY KEY ("id", "post_id", "keyword_id"))`,
     );
     await queryRunner.query(
       `CREATE TYPE "public"."posts_ai_status_enum" AS ENUM('in_progress', 'success', 'fail')`,
@@ -29,7 +29,7 @@ export class Migration1760878954669 implements MigrationInterface {
       `CREATE TABLE "users" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "device_token" character varying NOT NULL, CONSTRAINT "UQ_15b7292d84f25471d3fb957c7bb" UNIQUE ("device_token"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "onboard_categories" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "category" character varying NOT NULL, CONSTRAINT "UQ_c11490bf17f662f2bdf870cd81a" UNIQUE ("category"), CONSTRAINT "PK_d5dfeb07302b45379eb4974ddcf" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "onboard_categories" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "category" character varying NOT NULL, CONSTRAINT "UQ_c11490bf17f662f2bdf870cd81a" UNIQUE ("category"), CONSTRAINT "PK_d5dfeb07302b45379eb4974ddcf" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "metrics" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "is_success" boolean NOT NULL, "time" integer NOT NULL, "post_url" character varying NOT NULL, "post_id" character varying NOT NULL, CONSTRAINT "PK_5283cad666a83376e28a715bf0e" PRIMARY KEY ("id"))`,
