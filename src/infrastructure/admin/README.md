@@ -30,6 +30,7 @@ http://localhost:3000/admin
 ```
 
 Default credentials:
+
 - Email: `admin@linkit.com`
 - Password: `admin123`
 
@@ -51,6 +52,7 @@ The admin panel manages the following entities:
 ### Navigation Groups
 
 Resources are organized into logical groups:
+
 - **Users**: User-related entities
 - **Content**: Posts, folders, keywords
 - **AI**: AI classification data
@@ -82,7 +84,7 @@ resources: [
       },
     },
   },
-]
+];
 ```
 
 For more customization options, refer to the [AdminJS documentation](https://docs.adminjs.co/).
