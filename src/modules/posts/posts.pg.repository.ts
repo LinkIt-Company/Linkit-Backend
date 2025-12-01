@@ -132,11 +132,12 @@ export class PostsPGRepository extends Repository<Post> {
 
   async getPostCountByFolderIds(folderIds: string[]) {
     const posts = await this.createQueryBuilder('post')
-      .select('folderId')
-      .addSelect('COUNT(id)', 'count')
-      .where('folderId IN (:...folderIds)', {
+      .select('post.folderId', 'folderId')
+      .addSelect('COUNT(post.id)', 'count')
+      .where('post.folderId IN (:...folderIds)', {
         folderIds,
       })
+      .groupBy('post.folderId')
       .getRawMany<{ folderId: string; postCount: string }>();
 
     const result = posts.map((folder) => ({

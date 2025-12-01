@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Types } from 'mongoose';
 import { sum } from '@src/common';
 import { FolderType } from '@src/infrastructure/database/types/folder-type.enum';
 import { PostsPGRepository } from '../posts/posts.pg.repository';
@@ -71,21 +70,21 @@ export class FoldersV2Service {
       id: null,
       name: '전체',
       type: FolderType.ALL,
-      userId: new Types.ObjectId(userId),
+      userId,
       postCount: allPostCount,
     };
     const favorite = {
       id: null,
       name: '즐겨찾기',
       type: FolderType.FAVORITE,
-      userId: new Types.ObjectId(userId),
+      userId,
       postCount: favoritePostCount,
     };
     const readLater = {
       id: defaultFolder.id,
       name: defaultFolder.name,
       type: FolderType.DEFAULT,
-      userId: new Types.ObjectId(userId),
+      userId,
       postCount: allPostCount - customFoldersPostCount,
     };
 
