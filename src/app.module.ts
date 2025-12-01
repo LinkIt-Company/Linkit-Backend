@@ -10,6 +10,7 @@ import { AiModule } from './infrastructure/ai/ai.module';
 import { AwsLambdaModule } from './infrastructure/aws-lambda/aws-lambda.module';
 import { DiscordModule } from './infrastructure/discord/discord.module';
 import { PuppeteerPoolModule } from './infrastructure/puppeteer-pool/puppeteer-pool.module';
+import { AdminJSModule } from './infrastructure/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ClassificationModule } from './modules/classification/classification.module';
 import { FoldersModule } from './modules/folders/folders.module';
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     DatabaseModule,
     DiscordModule,
     AiModule,
+    AdminJSModule,
     UsersModule,
     ClassificationModule,
     AuthModule,

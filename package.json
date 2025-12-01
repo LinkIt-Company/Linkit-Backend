@@ -34,6 +34,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@adminjs/express": "5.1.0",
+    "@adminjs/typeorm": "4.0.0",
     "@aws-sdk/client-lambda": "^3.606.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
@@ -47,6 +49,7 @@
     "@sentry/node": "^8.9.2",
     "@sentry/profiling-node": "^8.9.2",
     "@types/dotenv": "^8.2.3",
+    "adminjs": "6.8.7",
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
     "cheerio": "1.0.0-rc.12",
@@ -55,6 +58,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "express": "^4.19.2",
+    "express-session": "^1.18.2",
     "iconv-lite": "^0.6.3",
     "js-tiktoken": "^1.0.14",
     "lodash": "^4.17.21",
@@ -65,6 +69,7 @@
     "pg": "^8.13.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "tslib": "^2.8.1",
     "typeorm": "^0.3.20",
     "uuid": "^10.0.0"
   },
@@ -77,6 +82,7 @@
     "@swc/core": "^1.6.5",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/express": "^4.17.17",
+    "@types/express-session": "^1.18.2",
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.17.6",
     "@types/node": "^20.3.1",
